@@ -1,7 +1,7 @@
 const express = require('express');
 const serverless = require('serverless-http');
 const ObjectId = require('mongodb').ObjectId;
-const clientPromise = require('../lib/mongodb-client').clientPromise;
+const clientPromise = require('../../lib/mongodb-client').clientPromise;
 
 const app = express();
 

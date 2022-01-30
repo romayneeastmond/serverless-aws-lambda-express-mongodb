@@ -3,8 +3,8 @@ const serverless = require('serverless-http');
 
 const app = express();
 
-app.get('/', (req, res) => {
-    if (req.method === 'POST') {
+app.all('/', (req, res) => {
+    if (req.method !== 'GET') {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 

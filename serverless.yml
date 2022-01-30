@@ -15,31 +15,31 @@ functions:
     events:
       - httpApi: "*"
   sites-dev-add:
-    handler: src/sites-dev-addSite.handler
+    handler: src/dev/sites-dev-addSite.handler
     events:
       - httpApi:
           path: /sites/add
           method: post
   sites-dev-delete:
-    handler: src/sites-dev-deleteSite.handler
+    handler: src/dev/sites-dev-deleteSite.handler
     events:
       - httpApi:
           path: /sites/delete
           method: delete
   sites-dev-get:
-    handler: src/sites-dev-getSite.handler
+    handler: src/dev/sites-dev-getSite.handler
     events:
       - httpApi:
           path: /sites/get
           method: get
   sites-dev-list:
-    handler: src/sites-dev-listSites.handler
+    handler: src/dev/sites-dev-listSites.handler
     events:
       - httpApi:
           path: /sites/list
           method: get
   sites-dev-update:
-    handler: src/sites-dev-updateSite.handler
+    handler: src/dev/sites-dev-updateSite.handler
     events:
       - httpApi:
           path: /sites/update
