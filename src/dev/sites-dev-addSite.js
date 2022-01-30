@@ -1,34 +1,22 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const serverless = require('serverless-http');
-const ObjectId = require('mongodb').ObjectId;
-const clientPromise = require('../lib/mongodb-client').clientPromise;
+const clientPromise = require('../../lib/mongodb-client').clientPromise;
 
 const app = express();
 
 app.use(bodyParser.json({ strict: false }));
 
-app.put(['/', '/sites/update'], async (req, res) => {
-    if (req.method !== 'POST' && req.method !== 'PUT') {
+app.post(['/', '/sites/add'], async (req, res) => {
+    if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
-    const id = req.query.id;
     const url = req.body.url;
     const description = req.body.description;
 
-    let errors = [];
-
-    if (id === undefined || id.trim().length === 0) {
-        errors.push('Query String Parameters requires an id value');
-    }
-
     if ((url === undefined || url.trim().length === 0) || (description === undefined || description.trim().length === 0)) {
-        errors.push('Request Payload requires url and description values');
-    }
-
-    if (errors.length > 0) {
-        return res.status(422).json({ errors: errors });
+        return res.status(422).json({ error: 'Request Payload requires url and description values' });
     }
 
     await clientPromise.then(async (client) => {
@@ -36,8 +24,7 @@ app.put(['/', '/sites/update'], async (req, res) => {
 
         const collection = db.collection('definitions');
 
-        const data = await collection.findOneAndUpdate(
-            { _id: ObjectId(id) }, { $set: { ...req.body } })
+        const data = await collection.insertOne({ url, description });
 
         return res.status(200).json(data);
     }).catch((error) => {
