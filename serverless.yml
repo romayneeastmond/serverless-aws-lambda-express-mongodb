@@ -1,0 +1,49 @@
+org: romayneeastmond
+app: aws-sites
+service: aws-sites
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  environment:
+    MONGODB_URI: ${param:MONGODB_URI}
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - httpApi: "*"
+  sites-dev-add:
+    handler: src/sites-dev-addSite.handler
+    events:
+      - httpApi:
+          path: /sites/add
+          method: post
+  sites-dev-delete:
+    handler: src/sites-dev-deleteSite.handler
+    events:
+      - httpApi:
+          path: /sites/delete
+          method: delete
+  sites-dev-get:
+    handler: src/sites-dev-getSite.handler
+    events:
+      - httpApi:
+          path: /sites/get
+          method: get
+  sites-dev-list:
+    handler: src/sites-dev-listSites.handler
+    events:
+      - httpApi:
+          path: /sites/list
+          method: get
+  sites-dev-update:
+    handler: src/sites-dev-updateSite.handler
+    events:
+      - httpApi:
+          path: /sites/update
+          method: put
+
+plugins:
+  - serverless-offline
