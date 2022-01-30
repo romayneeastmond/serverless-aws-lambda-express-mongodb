@@ -8,10 +8,6 @@ const app = express();
 app.use(bodyParser.json({ strict: false }));
 
 app.post(['/', '/sites/add'], async (req, res) => {
-    if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Method Not Allowed' });
-    }
-
     const url = req.body.url;
     const description = req.body.description;
 

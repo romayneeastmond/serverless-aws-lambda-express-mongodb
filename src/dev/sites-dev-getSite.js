@@ -6,10 +6,6 @@ const clientPromise = require('../../lib/mongodb-client').clientPromise;
 const app = express();
 
 app.get(['/', '/sites/get'], async (req, res) => {
-    if (req.method !== 'GET') {
-        return res.status(405).json({ error: 'Method Not Allowed' });
-    }
-
     const id = req.query.id;
 
     if (id === undefined || id.trim().length === 0) {

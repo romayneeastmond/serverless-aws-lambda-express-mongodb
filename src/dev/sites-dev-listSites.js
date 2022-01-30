@@ -4,12 +4,8 @@ const clientPromise = require('../../lib/mongodb-client').clientPromise;
 
 const app = express();
 
-app.get(['/', '/sites/list'], async (req, res) => {
-    if (req.method !== 'GET') {
-        return res.status(405).json({ error: 'Method Not Allowed' });
-    }
-
-    await clientPromise.then(async (client) => {
+const callback = async (mongoClientPromise, req, res) => {
+    await mongoClientPromise.then(async (client) => {
         const db = client.db();
 
         const collection = db.collection('definitions');
@@ -20,9 +16,18 @@ app.get(['/', '/sites/list'], async (req, res) => {
     }).catch((error) => {
         return res.status(500).json({ error: error });
     })
+};
+
+app.get(['/', '/sites/list'], async (req, res) => {
+    if (clientPromise === null) {
+        return res.status(500).json({ error: 'Database connected failed.' });
+    }
+
+    return callback(clientPromise, req, res);
 });
 
 module.exports = {
     app,
+    callback,
     handler: serverless(app)
 };

@@ -6,10 +6,6 @@ const clientPromise = require('../../lib/mongodb-client').clientPromise;
 const app = express();
 
 app.delete(['/', '/sites/delete'], async (req, res) => {
-    if (req.method !== 'DELETE') {
-        return res.status(405).json({ error: 'Method Not Allowed' });
-    }
-
     const id = req.query.id;
 
     if (id === undefined || id.trim().length === 0) {
