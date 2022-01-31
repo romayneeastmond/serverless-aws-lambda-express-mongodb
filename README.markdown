@@ -1,4 +1,4 @@
-# Severless AWS Lambda Functions with Express and MongoDB Backend
+# Severless AWS Lambda Functions with Express, MongoDB Backend, and Jest
 
 By using Serverless to deploy Lamdba functions to Amazon Web Services (AWS) this project is able to replace the original implementation created in the [MongoDB, React Next.js, and Material UI Demo](https://github.com/romayneeastmond/mongodb-react-nextjs-mui-demo) repository. The cloud based functions use Express to provides the routing logic which then passes data to and from the MongoDB database.
 
