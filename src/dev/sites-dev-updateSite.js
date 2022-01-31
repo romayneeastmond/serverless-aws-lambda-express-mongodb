@@ -46,10 +46,6 @@ const callback = async (mongoClientPromise, req, res) => {
 }
 
 app.all(['/', '/sites/update'], async (req, res) => {
-    if (clientPromise === null) {
-        return res.status(500).json({ error: 'Database connected failed.' });
-    }
-
     return callback(clientPromise, req, res);
 });
 

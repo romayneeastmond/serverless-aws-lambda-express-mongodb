@@ -26,13 +26,49 @@ describe('Express Sites Callbacks', () => {
         return res;
     };
 
+    const setUp = async () => {
+        const db = connection.db();
+        const sites = db.collection('definitions');
+
+        const mockSite = {
+            url: 'http://www.bae727af-f7f1-4da8-98d7-ab0a16424553.com/',
+            description: 'Test description'
+        };
+
+        const data = await sites.insertOne(mockSite);
+
+        return data;
+    }
+
+    const cleanUp = async () => {
+        const db = connection.db();
+        const sites = db.collection('definitions');
+
+        await sites.deleteMany({});
+    }
+
     beforeAll(async () => {
         connection = await MongoClient.connect(global.__MONGO_URI__,
             { useNewUrlParser: true, useUnifiedTopology: true });
     });
 
     afterAll(async () => {
+        await cleanUp();
         await connection.close();
+    });
+
+    test('/sites/add', async () => {
+        const req = mockRequest('POST', {}, {
+            url: 'http://www.bc9ce8ea-8f0f-4645-8889-f84387e21a05.com/',
+            description: 'Test description'
+        });
+
+        const res = mockResponse();
+
+        await callbackSitesDevAdd(connection.connect(), req, res);
+
+        expect(res.status).toHaveBeenCalledTimes(1);
+        expect(res.json).toHaveBeenCalledTimes(1);
     });
 
     test('/sites/add Empty Body', async () => {
@@ -40,6 +76,40 @@ describe('Express Sites Callbacks', () => {
         const res = mockResponse();
 
         await callbackSitesDevAdd(connection.connect(), req, res);
+
+        expect(res.status).toHaveBeenCalledTimes(1);
+        expect(res.json).toHaveBeenCalledTimes(1);
+    });
+
+    test('/sites/add False Promise', async () => {
+        const req = mockRequest('POST', {}, {
+            url: 'http://www.1cb142e7-3584-4c8c-be35-a8ea1516e0ab.com/',
+            description: 'Test description'
+        });
+
+        const res = mockResponse();
+
+        const clientPromise = new Promise((resolve, reject) => {
+            resolve();
+            reject();
+        });
+
+        await callbackSitesDevAdd(clientPromise, req, res);
+
+        expect(res.status).toHaveBeenCalledTimes(1);
+        expect(res.json).toHaveBeenCalledTimes(1);
+    });
+
+    test('/sites/delete', async () => {
+        const data = await setUp();
+
+        const req = mockRequest('DELETE', {
+            id: data.insertedId.toString()
+        });
+
+        const res = mockResponse();
+
+        await callbackSitesDevDelete(connection.connect(), req, res);
 
         expect(res.status).toHaveBeenCalledTimes(1);
         expect(res.json).toHaveBeenCalledTimes(1);
@@ -63,6 +133,21 @@ describe('Express Sites Callbacks', () => {
         const res = mockResponse();
 
         await callbackSitesDevDelete(connection.connect(), req, res);
+
+        expect(res.status).toHaveBeenCalledTimes(1);
+        expect(res.json).toHaveBeenCalledTimes(1);
+    });
+
+    test('/sites/get', async () => {
+        const data = await setUp();
+
+        const req = mockRequest('GET', {
+            id: data.insertedId.toString()
+        });
+
+        const res = mockResponse();
+
+        await callbackSitesDevGet(connection.connect(), req, res);
 
         expect(res.status).toHaveBeenCalledTimes(1);
         expect(res.json).toHaveBeenCalledTimes(1);
@@ -101,6 +186,39 @@ describe('Express Sites Callbacks', () => {
         expect(res.json).toHaveBeenCalledTimes(1);
     });
 
+    test('/sites/list False Promise', async () => {
+        const req = mockRequest('GET');
+        const res = mockResponse();
+
+        const clientPromise = new Promise((resolve, reject) => {
+            resolve();
+            reject();
+        });
+
+        await callbackSitesDevList(clientPromise, req, res);
+
+        expect(res.status).toHaveBeenCalledTimes(1);
+        expect(res.json).toHaveBeenCalledTimes(1);
+    });
+
+
+    test('/sites/update', async () => {
+        const data = await setUp();
+
+        const req = mockRequest('PUT', {
+            id: data.insertedId.toString()
+        }, {
+            url: 'http://www.e7cdf4a3-ddb6-485c-90aa-2e4c58215e75.com/',
+            description: 'Test description'
+        });
+        const res = mockResponse();
+
+        await callbackSitesDevUpdate(connection.connect(), req, res);
+
+        expect(res.status).toHaveBeenCalledTimes(1);
+        expect(res.json).toHaveBeenCalledTimes(1);
+    });
+
     test('/sites/update GET', async () => {
         const req = mockRequest('GET');
         const res = mockResponse();
@@ -111,7 +229,7 @@ describe('Express Sites Callbacks', () => {
         expect(res.json).toHaveBeenCalledTimes(1);
     });
 
-    test('/sites/update NOT FOUND', async () => {
+    test('/sites/update Not Found', async () => {
         const req = mockRequest('PUT', {
             id: '2715c20d-1751-4dce-a8e0-5fb2d4d419fb'
         }, {
