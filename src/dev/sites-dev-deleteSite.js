@@ -5,14 +5,14 @@ const clientPromise = require('../../lib/mongodb-client').clientPromise;
 
 const app = express();
 
-app.delete(['/', '/sites/delete'], async (req, res) => {
+const callback = async (mongoClientPromise, req, res) => {
     const id = req.query.id;
 
     if (id === undefined || id.trim().length === 0) {
         return res.status(422).json({ error: 'Query String Parameters requires an id value' });
     }
 
-    await clientPromise.then(async (client) => {
+    await mongoClientPromise.then(async (client) => {
         const db = client.db();
 
         const collection = db.collection('definitions');
@@ -23,9 +23,18 @@ app.delete(['/', '/sites/delete'], async (req, res) => {
     }).catch((error) => {
         return res.status(500).json({ error: error });
     })
+};
+
+app.delete(['/', '/sites/delete'], async (req, res) => {
+    if (clientPromise === null) {
+        return res.status(500).json({ error: 'Database connected failed.' });
+    }
+
+    return callback(clientPromise, req, res);
 });
 
 module.exports = {
     app,
+    callback,
     handler: serverless(app)
 };

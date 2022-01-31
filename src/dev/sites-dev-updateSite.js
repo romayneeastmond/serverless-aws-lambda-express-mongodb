@@ -8,7 +8,7 @@ const app = express();
 
 app.use(bodyParser.json({ strict: false }));
 
-app.all(['/', '/sites/update'], async (req, res) => {
+const callback = async (mongoClientPromise, req, res) => {
     if (req.method !== 'POST' && req.method !== 'PUT') {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
@@ -31,7 +31,7 @@ app.all(['/', '/sites/update'], async (req, res) => {
         return res.status(422).json({ errors: errors });
     }
 
-    await clientPromise.then(async (client) => {
+    await mongoClientPromise.then(async (client) => {
         const db = client.db();
 
         const collection = db.collection('definitions');
@@ -43,9 +43,18 @@ app.all(['/', '/sites/update'], async (req, res) => {
     }).catch((error) => {
         return res.status(500).json({ error: error });
     })
+}
+
+app.all(['/', '/sites/update'], async (req, res) => {
+    if (clientPromise === null) {
+        return res.status(500).json({ error: 'Database connected failed.' });
+    }
+
+    return callback(clientPromise, req, res);
 });
 
 module.exports = {
     app,
+    callback,
     handler: serverless(app)
 };

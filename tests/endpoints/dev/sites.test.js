@@ -64,6 +64,6 @@ describe('Express Sites Responses', () => {
     test('/sites/update GET', async () => {
         const result = await request(appSitesDevUpdateHandler).get('/sites/update');
 
-        expect(result.statusCode).toBe(405);
+        expect(result.statusCode).toBe(500);
     });
 });

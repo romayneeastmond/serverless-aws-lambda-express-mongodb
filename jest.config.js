@@ -6,7 +6,6 @@ module.exports = {
     ],
     testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.js?$',
     moduleFileExtensions: ['ts', 'js', 'json', 'node'],
-    testEnvironment: 'node',
     collectCoverage: true,
     collectCoverageFrom: [
         'handler.js',
@@ -14,5 +13,6 @@ module.exports = {
         'lib/**/*.js',
         '!lib/mongodb-client.js'
     ],
-    verbose: true
+    verbose: true,
+    preset: '@shelf/jest-mongodb'
 };
