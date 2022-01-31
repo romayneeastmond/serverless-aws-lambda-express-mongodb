@@ -43,6 +43,12 @@ describe('Express Sites Responses', () => {
         expect(result.statusCode).toBe(404);
     });
 
+    test('/sites/list', async () => {
+        const result = await request(appSitesDevListHandler).get('/sites/list');
+
+        expect(result.statusCode).toBe(500);
+    });
+
     test('/sites/list POST', async () => {
         const result = await request(appSitesDevListHandler).post('/sites/list');
 
@@ -56,8 +62,8 @@ describe('Express Sites Responses', () => {
     });
 
     test('/sites/update GET', async () => {
-        const result = await request(appSitesDevGetHandler).get('/sites/update');
+        const result = await request(appSitesDevUpdateHandler).get('/sites/update');
 
-        expect(result.statusCode).toBe(404);
+        expect(result.statusCode).toBe(500);
     });
 });

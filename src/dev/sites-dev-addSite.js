@@ -7,11 +7,7 @@ const app = express();
 
 app.use(bodyParser.json({ strict: false }));
 
-app.post(['/', '/sites/add'], async (req, res) => {
-    if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Method Not Allowed' });
-    }
-
+const callback = async (mongoClientPromise, req, res) => {
     const url = req.body.url;
     const description = req.body.description;
 
@@ -19,7 +15,7 @@ app.post(['/', '/sites/add'], async (req, res) => {
         return res.status(422).json({ error: 'Request Payload requires url and description values' });
     }
 
-    await clientPromise.then(async (client) => {
+    await mongoClientPromise.then(async (client) => {
         const db = client.db();
 
         const collection = db.collection('definitions');
@@ -30,9 +26,18 @@ app.post(['/', '/sites/add'], async (req, res) => {
     }).catch((error) => {
         return res.status(500).json({ error: error });
     })
+}
+
+app.post(['/', '/sites/add'], async (req, res) => {
+    if (clientPromise === null) {
+        return res.status(500).json({ error: 'Database connected failed.' });
+    }
+
+    return callback(clientPromise, req, res);
 });
 
 module.exports = {
     app,
+    callback,
     handler: serverless(app)
 };

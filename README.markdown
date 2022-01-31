@@ -62,6 +62,16 @@ serverless offline start
 serverless invoke local -function SERVERLESS_FUNCTION_NAME
 ```
 
+## Jest Unit Tests and MongoDB
+
+The /tests folder contains a number of unit tests. They are separated into the callbacks and endpoints directories.
+
+Callbacks are basically the integration with the provided test MongoDB database. In other words the Express callbacks are testing if the data passed to the Serverless functions are correctly making changes to the test database collection.
+
+Endpoints are unit tests, ensuring that all the expected URLs return a status, which in most cases is something either than a 404 Not Found. These unit tests also expect that the Express endpoints only accept the correct request method, i.e. GET, POST, etc.
+
+Finally the coverage report, located in /coverage/lcov-report/index.html shows how much of the Serverless functions are being covered in these unit tests.
+
 ## Copyright and Ownership
 
 All terms used are copyright to their original authors.
