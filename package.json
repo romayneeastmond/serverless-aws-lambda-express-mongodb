@@ -1,11 +1,22 @@
 {
   "dependencies": {
+    "apollo-datasource": "^3.3.1",
+    "apollo-datasource-rest": "^3.5.1",
+    "apollo-server": "^3.6.2",
+    "apollo-server-core": "^3.6.2",
+    "apollo-server-express": "^3.6.2",
+    "apollo-server-lambda": "^3.6.2",
     "body-parser": "^1.19.1",
+    "dotenv": "^15.0.0",
     "express": "^4.17.2",
+    "graphql": "^16.3.0",
     "mongodb": "^4.3.1",
+    "nodemon": "^2.0.15",
     "serverless-http": "^2.7.0"
   },
   "scripts": {
+    "apollo-server": "nodemon apollo-server.js",
+    "apollo-playground": "nodemon apollo-playground.js",
     "test": "jest --detectOpenHandles",
     "test:watch": "jest --watch"
   },
@@ -14,6 +25,7 @@
     "@types/jest": "^27.4.0",
     "jest": "^27.4.7",
     "mongodb-memory-server": "^8.2.0",
+    "serverless-dotenv-plugin": "^3.12.2",
     "serverless-offline": "^8.4.0",
     "supertest": "^6.2.2"
   }

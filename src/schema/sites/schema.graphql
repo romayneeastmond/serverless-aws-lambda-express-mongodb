@@ -1,0 +1,23 @@
+type Query {
+  get(id: String!): Site
+  list: [Site]
+}
+
+type Mutation {
+  add(site: SiteUpsert!): Site
+  delete(id: String!): Boolean
+  update(id: String!, site: SiteUpsert!): Site
+}
+
+type Site {
+  id: ID!
+  url: String
+  description: String
+  lastChecked: String
+}
+
+input SiteUpsert {
+  url: String!
+  description: String!
+  lastChecked: String
+}

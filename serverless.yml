@@ -1,6 +1,9 @@
 org: romayneeastmond
 app: aws-sites
 service: aws-sites
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
 frameworkVersion: "3"
 
 provider:
@@ -14,6 +17,13 @@ functions:
     handler: handler.hello
     events:
       - httpApi: "*"
+  graphql:
+    handler: handler-apollo.handler
+    events:
+      - http:
+          path: graphql
+          method: post
+          cors: false
   sites-dev-add:
     handler: src/dev/sites-dev-addSite.handler
     events:
@@ -44,6 +54,3 @@ functions:
       - httpApi:
           path: /sites/update
           method: put
-
-plugins:
-  - serverless-offline
